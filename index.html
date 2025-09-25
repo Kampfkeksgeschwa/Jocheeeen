@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fullscreen Video</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: black;
+    }
+    video {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <video autoplay loop muted playsinline id="bgvideo">
+    <source src="dein-video.mp4" type="video/mp4">
+    Dein Browser unterstützt das Video-Tag nicht.
+  </video>
+
+  <script>
+    const video = document.getElementById('bgvideo');
+
+    // Direkt versuchen, Ton zu aktivieren
+    video.muted = false;
+    video.volume = 1.0;
+    video.play().catch(() => {
+      // Falls Browser blockiert: Klick-Overlay anzeigen
+      const overlay = document.createElement("div");
+      overlay.innerText = "▶ Tippe / Klicke, um Ton zu aktivieren";
+      overlay.style.position = "fixed";
+      overlay.style.top = "0";
+      overlay.style.left = "0";
+      overlay.style.width = "100%";
+      overlay.style.height = "100%";
+      overlay.style.display = "flex";
+      overlay.style.alignItems = "center";
+      overlay.style.justifyContent = "center";
+      overlay.style.background = "rgba(0,0,0,0.5)";
+      overlay.style.color = "white";
+      overlay.style.fontSize = "2em";
+      overlay.style.cursor = "pointer";
+      document.body.appendChild(overlay);
+
+      overlay.addEventListener("click", () => {
+        video.muted = false;
+        video.play();
+        overlay.remove();
+      });
+    });
+  </script>
+</body>
+</html>
